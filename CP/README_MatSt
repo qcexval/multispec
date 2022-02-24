@@ -1,0 +1,43 @@
+COMMANDS
+UV spectra in solution and surfaces with Mat Studio + MOLCAS
+
+O.- Preparation of the "multispec_sol" simulation
+a) Run "multispec_sol" to prepare the scripts and folders
+
+1.- Preparation of the solute geom in gaussian (in gaussian folder)
+a) Geom opt and Freq with DFT, a few explicit solvent molecs and PCM
+b) Delete water and compute ESP charges
+c) ./gaus2car.sh to produce initial car file for Mat St from the gaussian charges log
+#d) ./gaus2optxyz.sh to extract the optimized xyz geom from opt+freq gaussian log 
+
+2.- NX (in newtonX folder)
+a) Create NX Wigner geoms and remove waters
+a.1) convert_nx_xyz.sh using the opt+freq gaussian log (explicit solvent will be removed and numbering added)
+
+3.- Mat Studio
+Forcefield: Dreiding
+Water charges: SPC
+-For box of solvent: 
+a) Box of 20x20x20 (images of solute atoms at > 15 Angs)
+b) Amorphous cell + Packing to fill box with solvent molecules (density 1 gr/mL)
+c) Dynamics NVT 1 ns with fixed gaussian geom and ESP charges (25 snapshots taken after 370 ps)
+-Only for surface:
+a) Amorphous cell + construction (20x20x20: images of solute atoms at > 15 Angs; density 1 gr/mL)
+b) Box of 20x20x60
+c) Dynamics NVT 1 ns of the surface (5 geoms are taken after 370 ps)
+d) Adsorption Locator at each one of the snapshots to get the lowest 5 configurations (in total 25 car)
+
+4.- Wigner geoms inserted in car files
+a) ./extractQM_from_car.sh
+b) ./lstrans_Wign2xyzMatSt.sh  # Wigner geoms from gaussian + NX are in fromNX folder
+c) ./Wign2car.sh
+
+5.- Mat Studio
+a) Dynamics NVT 5 ps with fixed Wigner QM geoms and ESP charges (100 car)
+
+6.- car files to xyz and XFiled for spectra
+a) ./out2incell.sh  # Move out cell waters to the main cell, add neighbour cells and select a sphere of 20 Angs around solute
+(QM xyz and XField is generated)
+
+7.- cross section programs
+

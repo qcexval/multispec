@@ -1,0 +1,10 @@
+>>> export MOLCAS_MOLDEN=ON
+&gateway
+  RICD
+  expert
+  Coord= $HomeDir/@GEOMETRY@ 
+  Group=nosymm 
+  Basis=ANO-RCC-VTZP
+  AngMom
+    0.00  0.00  0.00
+  AMFI
