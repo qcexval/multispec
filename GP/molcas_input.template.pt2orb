@@ -1,0 +1,33 @@
+>>> export MOLCAS_MOLDEN=ON
+&gateway
+  RICD
+  expert
+  Coord= $HomeDir/@GEOMETRY@ 
+  Group=nosymm 
+  Basis=ANO-RCC-VTZP
+  AngMom
+    0.00  0.00  0.00
+  AMFI
+&seward
+  BSSHOW
+  R03O
+  EXPERT
+
+&scf
+  charge=0
+&rasscf
+  symmetry=1
+  spin=1
+  charge=0
+  ciroot=1 1 1
+  lumorb
+&caspt2
+  frozen=0 
+  Prop
+&grid_it
+  filename=$Project.Pt2Orb
+  name=pt2
+  ascii
+  sparse
+  all
+

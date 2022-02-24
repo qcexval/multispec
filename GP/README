@@ -1,0 +1,28 @@
+COMMANDS
+--------
+
+UV spectra in gas phase with MOLCAS
+
+O.- Preparation of the "multispec" simulation
+a) Run "multispec" to prepare the scripts and folders
+
+1.- Preparation of the molecular geom in gaussian (in gaussian folder)
+a) Geom opt and Freq with DFT with Gaussian
+b) ./gaus2optxyz.sh --->  to extract the optimized xyz geom from opt+freq gaussian log 
+
+2.- NEA sampling (in newtonX folder)
+a) ./gaus2nx.sh --->  to generate the sampling in final_output file 
+                      using the opt+freq gaussian log 
+b) ./convert_nx_xyz.sh ---> to create all the xyz coordinates files of the NEA
+c) molden {file snaps} ---> to visualize the geoms
+
+3.- (Optional) Starting orbitals (in molcas.orb folder)
+
+4.- Molcas computations of VEE and f (in molcas.vee folder)
+a) Edit molcas_input.template files # Input keywords for Molcas
+b) ./generate_inps_molcas.sh  
+c) Edit template_lzMolcas with yous job_submit script
+d)
+
+3.- cross section programs
+

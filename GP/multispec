@@ -1,0 +1,53 @@
+#!/bin/bash
+
+if [ $# != 3 ]
+then
+  echo "Usage:"
+  echo "./multispec {project name} {number of QM atoms} {number of confs}"
+else
+
+##############################################################################
+  # Variables to change:
+  prefix="$1"                                  # project name
+  QM="$2"                                      # number of QM atoms' 
+  Nconf="$3"                                   # number of geoms' 
+
+  # Fixed variables:
+  file="variables.inp"
+  source_dir="/home/roca/Software/scripts4Multispec"
+##############################################################################
+
+
+  [ ! -d 'multispec' ] && mkdir multispec
+  cd multispec
+
+  echo "prefix=$prefix" > $file
+  echo "QM=$QM" >> $file
+  echo "Nconf=$Nconf" >> $file
+
+  [ ! -d 'molcas.orb' ] && mkdir molcas.orb
+  [ ! -d 'molcas.vee' ] && mkdir molcas.vee
+  [ ! -d 'gaussian' ] && mkdir gaussian
+  [ ! -d 'newtonX' ] && mkdir newtonX
+
+  cp $source_dir/xyz2xyznum.sh newtonX
+  cp $source_dir/convert_nx_xyz.sh newtonX
+  cp $source_dir/convert_nx_xyz.x newtonX
+  cp $source_dir/xyz2xyznum.sh newtonX
+  cp $source_dir/gaus2nx.sh newtonX
+  cp $source_dir/gaus2optxyz.sh newtonX
+
+  cp $source_dir/README .
+  cp $source_dir/README_NEA .
+
+  cp $source_dir/generate_inps_molcas.sh molcas.vee
+  cp $source_dir/molcas_input.template.head molcas.vee
+  cp $source_dir/molcas_input.template.tail molcas.vee
+  cp $source_dir/send_queue.sh molcas.vee
+  cp $source_dir/send_queue_random.sh molcas.vee
+  cp $source_dir/template_lzMolcas molcas.vee
+  cp $source_dir/checklogs.sh molcas.vee
+
+  cp $source_dir/gaus2optxyz.sh gaussian
+
+fi
