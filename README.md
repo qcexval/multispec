@@ -2,7 +2,11 @@
 
 Software for predicting absorption electronic spectra with multiconfigurational quantum chemistry. 
 There are two options:
-- [GP] Gas phase absorption cross sections
+- [GP] Gas phase absorption spectroscopy. It includes:
+       > Ground and excited state absorption spectra
+       > Espontaneous emission
+       > Stimulated emission
+       > Transient absorption spectrum
 - [CP] Molar extinction coefficients of chromophores in condensed phases (in solution, at interfaces or surfaces, embeded in proteins or nucleic acids, etc.)
 
 ## References
