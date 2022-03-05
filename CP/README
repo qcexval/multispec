@@ -1,6 +1,13 @@
 COMMANDS
 UV spectra in solution and surfaces with Mat Studio + MOLCAS
 
+Authors: Daniel Roca-Sanjuán 
+         Ana Borrego-Sánchez
+         Sebastian P. Sitkiewicz
+         
+Institution: Instituto de Ciencia Molecular
+             Universitat de València
+             
 O.- Preparation of the "multispec_sol" simulation
 a) Run "multispec_sol" to prepare the scripts and folders
 
