@@ -1,0 +1,44 @@
+#!/bin/bash
+#PBS -S /bin/bash
+#PBS -m be
+#PBS -u @LOGNAME@
+#PBS -N @NAME@_@XX@-@YY@
+#PBS -l nodes=@ZZ@:ppn=2
+#PBS 
+################################################################################
+export MKL_NUM_THREADS=1
+export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/soft/intel/mkl/lib/intel64
+export LD_LIBRARY_PATH=:/soft/lib:\$LD_LIBRARY_PATH:/soft/OPENMOLCAS/OpenMolcas/build/lib/
+
+source /soft/intel/compilers_and_libraries/linux/bin/compilervars.sh intel64
+source /soft/intel/mkl/bin/mklvars.sh intel64
+source /soft/intel/impi/2018.3.222/bin64/mpivars.sh
+
+export MOLCAS=/soft/OPENMOLCAS/OpenMolcas/build
+
+export MOLCAS_NPROCS=1
+export MOLCAS_MEM=4000
+export MOLCAS_REDUCE_PRT=NO
+export MOLCAS_LINK=DIZZY
+export MOLCAS_PRINT=3
+export HomeDir=$PBS_O_WORKDIR
+cd $HomeDir
+
+for num in `seq @XX@ 1 @YY@`
+do
+  Project="g${num}_@NAME@.inp"
+  export Project=`basename $Project .inp`
+  export TempDir=/scr/$PBS_O_LOGNAME/$Project
+  export WorkDir=$TempDir/Work
+  rm -rf $TempDir
+  [ ! -d '$TempDir' ] && mkdir $TempDir
+  [ ! -d '$WorkDir' ] && mkdir $WorkDir
+  cd $WorkDir
+#------------------------------------------------------------------------------#
+pymolcas $HomeDir/$Project.inp > $WorkDir/$Project.log 2> $TempDir/$Project.err
+#------------------------------------------------------------------------------#
+  tar -cvzf orbs_${Project}.tar.gz ${Project}*Orb* ${Project}*molden*
+  cp $WorkDir/${Project}.log $HomeDir
+  rm ${Project}.*Orb* ${Project}.*molden*
+  cd -
+done

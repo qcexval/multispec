@@ -1,0 +1,8 @@
+%chk=@INP@.chk
+%nproc=6
+%mem=2GB
+#p gfinput iop(6/7=3) b3lyp/6-31G* opt freq nosymm
+
+@INP@     ! Do not add the xyz coordinates
+
+0 1

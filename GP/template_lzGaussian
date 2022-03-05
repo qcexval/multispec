@@ -1,0 +1,26 @@
+#!/bin/bash
+#---  Nombre del usuario y del calculo
+#PBS -u @LOGNAME@
+#PBS -N @NAME@ 
+
+#--- Para multiprocesador. En este caso 8.
+#PBS -l nodes=@ZZ@:ppn=6
+
+#---  Shell a usar, correo al comenzar y acabar
+#PBS -S /bin/bash
+###PBS -k eo
+#PBS -m be  
+#PBS -r n  
+
+FILE="@NAME@"
+ScrDir="/scr/$PBS_O_LOGNAME/$FILE"
+Wdir=$PBS_O_WORKDIR
+. /soft/g09.c01/g09/bsd/g09.profile
+
+mkdir $ScrDir
+cd $ScrDir
+g09 < $Wdir/$FILE.com > $ScrDir/$FILE.log
+cp *.log $Wdir
+exit
+
+

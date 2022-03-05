@@ -1,0 +1,100 @@
+#!/bin/bash
+
+if [ $# != 2 ]
+then
+  echo "Usage: ./multispec {project name} {file with initial xyz coords}"
+  echo "Example: ./multispec acrolein acrolein.xyz"
+else
+
+#################################################################################
+  # Variables :
+
+  project="$1"                                 # project name
+  geom="$2"                                    # xyz coords file
+  QM=`head -1 $2 | gawk '{print $1}'`          # number of QM atoms
+
+  file="variables.inp"
+  source_dir="/home/roca/Software/scripts4Multispec.v2022.all"
+  dir="multispec"
+ # vardir="~/.multispec"
+#################################################################################
+
+
+  [ ! -d "$dir" ] && mkdir $dir
+ # [ ! -d "$vardir" ] && mkdir $vardir   
+
+  #cd $vardir
+  cd $dir
+
+  echo "project=$project" > $file
+  echo "QM=$QM" >> $file
+  echo "methodGgs=" >> $file
+  echo "methodGes=" >> $file
+  echo "methodM=" >> $file
+  echo "Nconf=" >> $file
+  echo "delta=" >> $file
+
+
+  [ ! -d 'molcas' ] && mkdir molcas
+  [ ! -d 'molcas/gs_geom' ] && mkdir molcas/gs_geom
+  [ ! -d 'molcas/exc_geom' ] && mkdir molcas/exc_geom
+  [ ! -d 'gaussian' ] && mkdir gaussian
+  [ ! -d 'newtonX' ] && mkdir newtonX
+  [ ! -d 'spectrum' ] && mkdir spectrum
+
+  cp $source_dir/xyz2xyznum.sh newtonX
+  cp $source_dir/convert_nx_xyz.sh newtonX
+  cp $source_dir/convert_nx_xyz.x newtonX
+  cp $source_dir/xyz2xyznum.sh newtonX
+  cp $source_dir/gaus2nx.sh newtonX
+  cp $source_dir/gaus2optxyz.sh newtonX
+  cp $source_dir/xyzG2M.sh newtonX
+
+  cp $source_dir/README .
+
+  cp $source_dir/generate_inps_molcas.sh molcas/gs_geom
+  cp $source_dir/molcas_input.template molcas/gs_geom
+  cp $source_dir/send_queue_M.sh molcas/gs_geom
+  cp $source_dir/send_queue_M_random.sh molcas/gs_geom
+  cp $source_dir/template_lzMolcas molcas/gs_geom
+  cp $source_dir/checklogs.sh molcas/gs_geom
+  cp $source_dir/extract_molcas.sh molcas/gs_geom
+
+  cp $source_dir/generate_inps_molcas.sh molcas/exc_geom
+  cp $source_dir/molcas_input.template molcas/exc_geom
+  cp $source_dir/send_queue_M.sh molcas/exc_geom
+  cp $source_dir/send_queue_M_random.sh molcas/exc_geom
+  cp $source_dir/template_lzMolcas molcas/exc_geom
+  cp $source_dir/checklogs.sh molcas/exc_geom
+  cp $source_dir/extract_molcas.sh molcas/exc_geom
+
+  cp $source_dir/generate_inp_gaussian.sh gaussian
+  cp $source_dir/gaussian_input.template gaussian
+
+  cp $source_dir/os2spec.sh spectrum
+  cp $source_dir/os2spec.x spectrum
+  cp $source_dir/parameters.mod spectrum
+  cp $source_dir/spectrum.sh spectrum
+  cp $source_dir/deconvolute.sh spectrum
+   
+  cp ../$geom gaussian
+  cp $source_dir/send_queue_G.sh gaussian
+  cp $source_dir/template_lzGaussian gaussian
+
+  echo "******************************************************************************************************"
+  echo "* MULTISPEC tool   Mar 2022                                                                          *"
+  echo "*                                                                                                    *"
+  echo "* Multiconfigurational quantum chemistry prediction of electronic spectra                            *"
+  echo "* - Absorption (form the ground and excited states)                                                  *"
+  echo "* - Spontaneous and stimulated emission                                                              *"
+  echo "* - Transient absorption                                                                             *"
+  echo "*                                                                                                    *"
+  echo "* Authors:      Daniel Roca-Sanjuán    (daniel.roca@uv.es)                                           *"
+  echo "*               Sebastian P. Sitkiewicz                                                              *"
+  echo "*               Javier Carmona-García                                                                *"
+  echo "*                                                                                                    *"
+  echo "* Institution:  Quantum Chemisttry of the Excited State - Universitat de València (QCEXVAL) group    *"
+  echo "*               Instituto de Ciencia Molecular                                                       *"
+  echo "*               Universitat de València                                                              *"
+  echo "******************************************************************************************************"
+fi

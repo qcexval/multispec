@@ -1,0 +1,75 @@
+------------------------------------------------------------------------------------------
+MULTISPEC tool     Mar 2022
+------------------------------------------------------------------------------------------
+Program for predicting UV spectra in gas phase with Multiconfigurational Quantum Chemistry
+------------------------------------------------------------------------------------------
+
+Multiconfigurational quantum chemistry prediction of electronic spectra                            
+- Absorption form the ground and excited states (gsa and esa)                                                  
+- Spontaneous and stimulated emission (em and st)                                                             
+- Transient absorption (ta)                                                                            
+
+Authors:   Daniel Roca-Sanjuán  (daniel.roca@uv.es)
+           Luis Cerdán 
+           Sebastian P. Sitkiewicz
+           Javier Carmona-García
+
+
+Institution: Quantum Chemisttry of the Excited State - Universitat de València (QCEXVAL) group    
+             Instituto de Ciencia Molecular
+             Universitat de València
+
+------------------------------------------------------------------------------------------
+Installation
+------------------------------------------------------------------------------------------
+
+This program depends on the following software packages:
+- Gaussian
+- NewtonX
+- Molcas
+- gnuplot
+
+It contains fortran and shell scripts.
+
+Compile the fortran files by executing "./compile.sh"
+
+Add the pathNX for the NewtonX executables in gaus2nx.sh
+
+------------------------------------------------------------------------------------------
+Usage
+------------------------------------------------------------------------------------------
+
+Note: Execute the scripts withouth options for further help on the usage
+
+0.- Preparation of the "multispec" simulation
+  a) Run "multispec" to prepare the scripts and folders
+     (You only need an initial xyz coords file)
+
+1.- Preparation of the molecular geom in gaussian (in gaussian folder)
+  a) Edit gaussian_input.template
+  b) ./generate_inp_gaussian.sh
+  c) Opt+freq computation in gaussian (you can use the template and send_queue files)
+  d) Copy gaussian log file in newtonX folder
+
+2.- NEA sampling (in newtonX folder)
+  a) ./gaus2nx.sh --->  to generate the Wigner sampling of xyz coordinates 
+                        using the opt+freq gaussian log 
+  b) molden {file snaps} ---> to visualize the geoms
+  c) Copy the g*.xyz geometries in molcas folders
+
+3.- Molcas computations of VEE and f at the ground or excited state geoms (in molcas folders)
+  a) Edit molcas_input.template files # Input keywords for Molcas
+  b) ./generate_inps_molcas.sh  
+  c) VEE and f computation with Molcas (you can use the template and send_queue files)
+  d) ./checklogs.sh ---> to verify that the runs finished OK
+                         to verify correct Ref Weights in CASPT2 (use gnuplot)
+  e) ./extract_molcas.sh --->  to extract the VEE and f from Spin Free or Spin Orbit states
+  f) Copy res*.dat files to spectrum folder (files with VEE and f)
+
+4.- Generate the spectrum (in spectrum folder)
+  a) ./os2spec.sh --->  to create the file with data to plot
+  b) ./spectrum.sh ---> to create the gnu file for gnuplot
+  c) gnuplot -p {gnu file} for visualizing the full spectrum
+  d) Deconvolution of the spectrum: ./deconvolute.sh
+  e) gnuplot -p {gnu file} for visualizing the deconvoluted spectrum
+
