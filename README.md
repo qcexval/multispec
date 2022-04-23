@@ -1,6 +1,6 @@
 # multispec
 
-Software for predicting absorption electronic spectra with multiconfigurational quantum chemistry. 
+Software for predicting electronic spectra with multiconfigurational quantum chemistry and nuclear ensemble approaches. 
 There are two options:
 - [GP] Gas phase absorption spectroscopy. It includes:
   - Ground and excited state absorption spectra
